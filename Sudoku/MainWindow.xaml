@@ -1,0 +1,231 @@
+﻿<Window x:Class="Sudoku.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sudoku"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="500">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Width" Value="45"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontFamily" Value="Courier New"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="2,2,0,0"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid Margin="12,0,12,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="18*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="1" x:Name="menuButton" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="38" Height="38" Foreground="#FFC8CDFF" BorderBrush="{x:Null}" Click="OpenMenu" Background="{x:Null}">
+                <Image x:Name ="menuImg" Source="Resources/menuIcon-original.png" Width="48" Height="48" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Button>
+            <TextBlock Grid.Row="1" x:Name="Sudoku" HorizontalAlignment="Center" VerticalAlignment="Center" Text="SUDOKU" FontFamily="Courier New" FontSize="32" TextDecorations="{x:Null}" FontWeight="Bold"/>
+            <TextBlock Grid.Row="1" x:Name="Clock" HorizontalAlignment="Right" Text="00:00:00" VerticalAlignment="Bottom" FontFamily="Courier New Bold" FontSize="24"/>
+            
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="18*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                </Grid>
+                <Grid Grid.Column="1" Margin="3,0,3,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox Grid.Row="0" Grid.Column="0" x:Name="cell00"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="cell01"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" x:Name="cell02"/>
+                    <TextBox Grid.Row="1" Grid.Column="0" x:Name="cell10"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="cell11"/>
+                    <TextBox Grid.Row="1" Grid.Column="2" x:Name="cell12"/>
+                    <TextBox Grid.Row="2" Grid.Column="0" x:Name="cell20"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="cell21"/>
+                    <TextBox Grid.Row="2" Grid.Column="2" x:Name="cell22"/>
+
+                    <TextBox Grid.Row="0" Grid.Column="3" x:Name="cell03"/>
+                    <TextBox Grid.Row="0" Grid.Column="4" x:Name="cell04"/>
+                    <TextBox Grid.Row="0" Grid.Column="5" x:Name="cell05"/>
+                    <TextBox Grid.Row="1" Grid.Column="3" x:Name="cell13"/>
+                    <TextBox Grid.Row="1" Grid.Column="4" x:Name="cell14"/>
+                    <TextBox Grid.Row="1" Grid.Column="5" x:Name="cell15"/>
+                    <TextBox Grid.Row="2" Grid.Column="3" x:Name="cell23"/>
+                    <TextBox Grid.Row="2" Grid.Column="4" x:Name="cell24"/>
+                    <TextBox Grid.Row="2" Grid.Column="5" x:Name="cell25"/>
+
+                    <TextBox Grid.Row="0" Grid.Column="6" x:Name="cell06"/>
+                    <TextBox Grid.Row="0" Grid.Column="7" x:Name="cell07"/>
+                    <TextBox Grid.Row="0" Grid.Column="8" x:Name="cell08"/>
+                    <TextBox Grid.Row="1" Grid.Column="6" x:Name="cell16"/>
+                    <TextBox Grid.Row="1" Grid.Column="7" x:Name="cell17"/>
+                    <TextBox Grid.Row="1" Grid.Column="8" x:Name="cell18"/>
+                    <TextBox Grid.Row="2" Grid.Column="6" x:Name="cell26"/>
+                    <TextBox Grid.Row="2" Grid.Column="7" x:Name="cell27"/>
+                    <TextBox Grid.Row="2" Grid.Column="8" x:Name="cell28"/>
+
+                    <TextBox Grid.Row="3" Grid.Column="0" x:Name="cell30"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" x:Name="cell31"/>
+                    <TextBox Grid.Row="3" Grid.Column="2" x:Name="cell32"/>
+                    <TextBox Grid.Row="4" Grid.Column="0" x:Name="cell40"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" x:Name="cell41"/>
+                    <TextBox Grid.Row="4" Grid.Column="2" x:Name="cell42"/>
+                    <TextBox Grid.Row="5" Grid.Column="0" x:Name="cell50"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" x:Name="cell51"/>
+                    <TextBox Grid.Row="5" Grid.Column="2" x:Name="cell52"/>
+
+                    <TextBox Grid.Row="3" Grid.Column="3" x:Name="cell33"/>
+                    <TextBox Grid.Row="3" Grid.Column="4" x:Name="cell34"/>
+                    <TextBox Grid.Row="3" Grid.Column="5" x:Name="cell35"/>
+                    <TextBox Grid.Row="4" Grid.Column="3" x:Name="cell43"/>
+                    <TextBox Grid.Row="4" Grid.Column="4" x:Name="cell44"/>
+                    <TextBox Grid.Row="4" Grid.Column="5" x:Name="cell45"/>
+                    <TextBox Grid.Row="5" Grid.Column="3" x:Name="cell53"/>
+                    <TextBox Grid.Row="5" Grid.Column="4" x:Name="cell54"/>
+                    <TextBox Grid.Row="5" Grid.Column="5" x:Name="cell55"/>
+
+                    <TextBox Grid.Row="3" Grid.Column="6" x:Name="cell36"/>
+                    <TextBox Grid.Row="3" Grid.Column="7" x:Name="cell37"/>
+                    <TextBox Grid.Row="3" Grid.Column="8" x:Name="cell38"/>
+                    <TextBox Grid.Row="4" Grid.Column="6" x:Name="cell46"/>
+                    <TextBox Grid.Row="4" Grid.Column="7" x:Name="cell47"/>
+                    <TextBox Grid.Row="4" Grid.Column="8" x:Name="cell48"/>
+                    <TextBox Grid.Row="5" Grid.Column="6" x:Name="cell56"/>
+                    <TextBox Grid.Row="5" Grid.Column="7" x:Name="cell57"/>
+                    <TextBox Grid.Row="5" Grid.Column="8" x:Name="cell58"/>
+
+                    <TextBox Grid.Row="6" Grid.Column="0" x:Name="cell60"/>
+                    <TextBox Grid.Row="6" Grid.Column="1" x:Name="cell61"/>
+                    <TextBox Grid.Row="6" Grid.Column="2" x:Name="cell62"/>
+                    <TextBox Grid.Row="7" Grid.Column="0" x:Name="cell70"/>
+                    <TextBox Grid.Row="7" Grid.Column="1" x:Name="cell71"/>
+                    <TextBox Grid.Row="7" Grid.Column="2" x:Name="cell72"/>
+                    <TextBox Grid.Row="8" Grid.Column="0" x:Name="cell80"/>
+                    <TextBox Grid.Row="8" Grid.Column="1" x:Name="cell81"/>
+                    <TextBox Grid.Row="8" Grid.Column="2" x:Name="cell82"/>
+
+                    <TextBox Grid.Row="6" Grid.Column="3" x:Name="cell63"/>
+                    <TextBox Grid.Row="6" Grid.Column="4" x:Name="cell64"/>
+                    <TextBox Grid.Row="6" Grid.Column="5" x:Name="cell65"/>
+                    <TextBox Grid.Row="7" Grid.Column="3" x:Name="cell73"/>
+                    <TextBox Grid.Row="7" Grid.Column="4" x:Name="cell74"/>
+                    <TextBox Grid.Row="7" Grid.Column="5" x:Name="cell75"/>
+                    <TextBox Grid.Row="8" Grid.Column="3" x:Name="cell83"/>
+                    <TextBox Grid.Row="8" Grid.Column="4" x:Name="cell84"/>
+                    <TextBox Grid.Row="8" Grid.Column="5" x:Name="cell85"/>
+
+                    <TextBox Grid.Row="6" Grid.Column="6" x:Name="cell66"/>
+                    <TextBox Grid.Row="6" Grid.Column="7" x:Name="cell67"/>
+                    <TextBox Grid.Row="6" Grid.Column="8" x:Name="cell68"/>
+                    <TextBox Grid.Row="7" Grid.Column="6" x:Name="cell76"/>
+                    <TextBox Grid.Row="7" Grid.Column="7" x:Name="cell77"/>
+                    <TextBox Grid.Row="7" Grid.Column="8" x:Name="cell78"/>
+                    <TextBox Grid.Row="8" Grid.Column="6" x:Name="cell86"/>
+                    <TextBox Grid.Row="8" Grid.Column="7" x:Name="cell87"/>
+                    <TextBox Grid.Row="8" Grid.Column="8" x:Name="cell88"/>
+
+                    <Border Grid.Row="2" Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="0,0,0,3"/>
+                    <Border Grid.Row="5" Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="0,0,0,3"/>
+                    <Border Grid.Column="3" Grid.RowSpan="9" BorderBrush="Black" BorderThickness="3,0,0,0"/>
+                    <Border Grid.Column="6" Grid.RowSpan="9" BorderBrush="Black" BorderThickness="3,0,0,0"/>
+                    <Border Grid.Column="1" Grid.RowSpan="9" BorderBrush="Black" BorderThickness="0.5,0,0.5,0"/>
+                    <Border Grid.Column="4" Grid.RowSpan="9" BorderBrush="Black" BorderThickness="0.5,0,0.5,0"/>
+                    <Border Grid.Column="7" Grid.RowSpan="9" BorderBrush="Black" BorderThickness="0.5,0,0.5,0"/>
+                    <Border Grid.Row="1" Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="0,0.5,0,0.5"/>
+                    <Border Grid.Row="4" Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="0,0.5,0,0.5"/>
+                    <Border Grid.Row="7" Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="0,0.5,0,0.5"/>
+                    <Border Grid.Column="0" Grid.RowSpan="9" Grid.ColumnSpan="9" BorderBrush="Black" BorderThickness="3,3,3,3"/>
+
+                    <Popup x:Name="menuPopup" PlacementTarget="{Binding ElementName=cell01}" IsOpen="False" Height="260" Width="316" AllowsTransparency="true">
+                        <Grid Background="#BF0C0E2E">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="1.5*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1.5*"/>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="newGameButton" Click="NewGameClick" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Background="White" FontSize="24" FontFamily="Courier New">NEW GAME</Button>
+                            <Button x:Name="restartButton" Click="RestartClick" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Background="White" FontSize="24" FontFamily="Courier New">RESTART</Button>
+                            <Button x:Name="quitButton" Click="QuitClick" Grid.Row="5" Grid.Column="1" Background="White" FontSize="18" FontFamily="Courier New">QUIT</Button>
+                            <Button x:Name="closeButton" Click="CloseClick" Grid.Row="5" Grid.Column="3" Background="White" FontSize="18" FontFamily="Courier New">CLOSE</Button>
+                        </Grid>
+                    </Popup>
+                    <Popup x:Name="levelPopup" PlacementTarget="{Binding ElementName=cell01}" IsOpen="False" Height="260" Width="316" AllowsTransparency="true">
+                        <Grid Background="#BF0C0E2E">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="easyButton" Click="EasyClick" Grid.Row="1" Grid.Column="1" Background="White" FontSize="18" FontFamily="Courier New" BorderBrush="#FF0F266E" BorderThickness="2">EASY</Button>
+                            <Button x:Name="mediumButton" Click="MediumClick" Grid.Row="1" Grid.Column="3" Background="White" FontSize="18" FontFamily="Courier New" BorderBrush="#FF0F266E" BorderThickness="2">MEDIUM</Button>
+                            <Button x:Name="hardButton" Click="HardClick" Grid.Row="1" Grid.Column="5" Background="White" FontSize="18" FontFamily="Courier New" BorderBrush="#FF0F266E" BorderThickness="2">HARD</Button>
+                        </Grid>
+                    </Popup>
+                    <TextBlock x:Name="solved" Grid.ColumnSpan="9" Grid.RowSpan="9" HorizontalAlignment="Center" Text="YOU WON!" TextAlignment="Center" VerticalAlignment="Center" FontSize="68" Foreground="#FFCA0E00" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="400" FontFamily="Courier New" Height="100" Background="White" Visibility="Hidden"/>
+                    <TextBlock x:Name="notSolved" Grid.ColumnSpan="9" Grid.RowSpan="9" HorizontalAlignment="Center" Text="Try Again" TextAlignment="Center" VerticalAlignment="Center" FontSize="68" Foreground="#FFCA0E00" Background="White" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="400" FontFamily="Courier New" Visibility="Hidden"/>
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
