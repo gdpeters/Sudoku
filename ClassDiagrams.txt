@@ -1,0 +1,83 @@
+Window (GUI XAML)
+_________________________
+gameboard design
+game clock design
+menu design
+
+
+MainWindow (CS)
+_________________________
+- game: Game
+- gameClock: GameClock
+_________________________
+- NewGameClick: void
+- RestartGameClick: void
+- CloseMenuClick: void
+- QuitGameClick: void
+- OpenMenuClick: void
+- LevelClick: void
+- DisplayGame: void
+- TextChanged: void
+- DisplayBanner: void
+- RemoveBanner: void
+- SetTimer: void
+- UpdateClock: void
+
+
+Game
+_________________________
++ Difficulty: enum
+- levelEasy: int = 30
+- levelMedium: int = 40
+- levelHard: int = 50
+- levelGame: int
+- rows: int = 9
+- columns: int = 9
+- solution: Solution
+- startBoard: int[,]
+_________________________
+- GetLevel: int
++ Game:
++ StartGame: void
++ GetStartBoard: int[,]
++ CheckProgress: bool?
+
+
+<<enumeration>>
+Difficulty
+____________________________
+EASY
+MEDIUM
+HARD
+
+
+Solution
+_________________________
+- rows: int
+- columns: int
+- solution: int[,]
+_________________________
+- BuildSolution: void
+- FillCell: Boolean
+- GetNextCell: int[]
+- GetOptions: ArrayList
+- GetRow: ArrayList
+- GetCol: ArrayList
+- GetBlock: ArrayList
++ Solution:
++ GetSolution: int[,]
++ IsEqual: Boolean
++ CopySolution: int[,]
+
+
+
+GameClock
+____________________________
+- start: DateTime
+- paused: DateTime
+_________________________
++ GameClock:
++ Start: void
++ Pause: void
++ Resume: void
++ GetTime: String

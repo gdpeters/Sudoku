@@ -1,0 +1,10 @@
+Start new game
+Restart game
+Quit game
+Select game difficulty
+    Easy
+    Medium
+    Hard
+Add numbers to the gameboard
+View game clock
+Notified when game is won
