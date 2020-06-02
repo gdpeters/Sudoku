@@ -25,12 +25,14 @@ namespace Sudoku
         private Game game;
         private int[,] currentBoard;
         private DispatcherTimer t, fader;
-        private DateTime startTime, pausedTime;
+        private GameTimer gameTimer;
 
         public MainWindow()
         {
             InitializeComponent();
             menuPopup.IsOpen = true;
+            gameTimer = new GameTimer();
+            this.SetTimer();
         }
 
         private void NewGameClick(object sender, RoutedEventArgs e)
@@ -56,29 +58,25 @@ namespace Sudoku
         }
         private void ChooseLevel(int level)
         {
-            game.Generate(level);
+            game.StartGame(level);
             this.WriteCells();
             levelPopup.IsOpen = false;
-            this.SetTimer();
+            gameTimer.Start();
+            t.Start();
         }
 
         private void SetTimer()
         {
             t = new DispatcherTimer();
             t.Interval = TimeSpan.FromSeconds(1);
-            startTime = DateTime.Now;
             t.Tick += UpdateClock;
-            t.Start();
         }
 
         private void UpdateClock(object sender, EventArgs e)
         {
-            TimeSpan elapsed = DateTime.Now - startTime;
-            int hh = elapsed.Hours;
-            int mm = elapsed.Minutes;
-            int ss = elapsed.Seconds;
-            Clock.Text = String.Format("{0,2:D2}:{1,2:D2}:{2,2:D2}", hh, mm, ss);
+            Clock.Text = gameTimer.GetTime();
         }
+
 
         private void WriteCells()
         {
@@ -110,12 +108,21 @@ namespace Sudoku
             }
         }
 
+        private void OpenMenu(object sender, RoutedEventArgs e)
+        {
+            t.Stop();
+            gameTimer.Pause();
+            menuPopup.IsOpen = true;
+        }
+
         private void RestartClick(object sender, RoutedEventArgs e)
         {
             t.Stop();
             this.WriteCells();
             menuPopup.IsOpen = false;
-            this.SetTimer();
+            gameTimer = new GameTimer();
+            gameTimer.Start();
+            t.Start();
         }
 
         private void QuitClick(object sender, RoutedEventArgs e)
@@ -128,15 +135,8 @@ namespace Sudoku
         private void CloseClick(object sender, RoutedEventArgs e)
         {
             menuPopup.IsOpen = false;
+            gameTimer.Resume();
             t.Start();
-            startTime = startTime + (DateTime.Now - pausedTime);
-        }
-
-        private void OpenMenu(object sender, RoutedEventArgs e)
-        {
-            t.Stop();
-            pausedTime = DateTime.Now;
-            menuPopup.IsOpen = true;
         }
 
         private void Text_Changed(object sender, TextChangedEventArgs e)
@@ -166,14 +166,14 @@ namespace Sudoku
                     }
                 }
             }
-
+            
             if (isReady)
             {
                 t.Stop();
                 fader = new DispatcherTimer();
                 fader.Interval = TimeSpan.FromMilliseconds(75);
 
-                if (game.IsSolved(currentBoard))
+                if (game.IsWinner(currentBoard))
                 {
                     solved.Visibility = Visibility.Visible;                    
                 }
