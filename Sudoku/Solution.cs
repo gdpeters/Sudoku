@@ -76,14 +76,14 @@ namespace Sudoku
         /// <param name="c">cell column</param>
         /// <param name="cellOptions">options list containing valid numbers for cell[r,c]</param>
         /// <returns>true if the gameboard is valid</returns>
-        private Boolean FillCell(int r, int c, ArrayList<Integer> cellOptions)
+        private Boolean FillCell(int r, int c, ArrayList cellOptions)
         {
             if (cellOptions.Count < 1)
                 return false;
 
             Random rand = new Random();
             int opsIndex = rand.Next(cellOptions.Count);
-            int num = cellOptions[opsIndex];
+            int num = (int)cellOptions[opsIndex];
             solution[r, c] = num;
 
             if (r == 8 && c == 8)
@@ -128,14 +128,14 @@ namespace Sudoku
         /// <param name="r">row</param>
         /// <param name="c">column</param>
         /// <returns>list of valid numbers for cell[row,col]</returns>
-        private ArrayList<Integer> GetOptions(int r, int c)
+        private ArrayList GetOptions(int r, int c)
         {
-            ArrayList unavailableValues = new ArrayList<Integer>();
+            ArrayList unavailableValues = new ArrayList();
             unavailableValues.AddRange(this.GetRow(r));
             unavailableValues.AddRange(this.GetCol(c));
             unavailableValues.AddRange(this.GetBlock(r, c));
 
-            ArrayList uniqueOptions = new ArrayList<Integer>();
+            ArrayList uniqueOptions = new ArrayList();
             for (int d = 1; d < 10; d++)
             {
                 if (!unavailableValues.Contains(d))
@@ -149,9 +149,9 @@ namespace Sudoku
         /// </summary>
         /// <param name="r">row</param>
         /// <returns>list of numbers currently in row r</returns>
-        private ArrayList<Integer> GetRow(int r)
+        private ArrayList GetRow(int r)
         {
-            ArrayList rowValues = new ArrayList<Integer>();
+            ArrayList rowValues = new ArrayList();
             for (int i = 0; i < columns; i++)
             {
                 if (solution[r, i] != 0)
