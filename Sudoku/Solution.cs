@@ -9,17 +9,19 @@ namespace Sudoku
 {
     class Solution
     {
-        private const int ROWS = 9;
-        private const int COLUMNS = 9;
+        private int rows;
+        private int columns;
         private int[,] solution;
 
-        public Solution()
+        public Solution(int rows, int columns)
         {
-            solution = new int[9, 9];
+            this.rows = rows;
+            this.columns = columns;
+            solution = new int[rows, columns];
             this.BuildSolution();
         }
 
-        public void BuildSolution()
+        private void BuildSolution()
         {
             int startRow = 0;
             int startCol = 0;
@@ -38,9 +40,9 @@ namespace Sudoku
             if (other.Length != solution.Length)
                 return false;
 
-            for (int r = 0; r < ROWS; r++)
+            for (int r = 0; r < rows; r++)
             {
-                for (int c = 0; c < COLUMNS; c++)
+                for (int c = 0; c < columns; c++)
                 {
                     if (solution[r, c] != other[r, c])
                         return false;
@@ -51,10 +53,10 @@ namespace Sudoku
 
         public int[,] CopySolution()
         {
-            int[,] copy = new int[ROWS, COLUMNS];
-            for (int r = 0; r < ROWS; r++)
+            int[,] copy = new int[rows, columns];
+            for (int r = 0; r < rows; r++)
             {
-                for (int c = 0; c < COLUMNS; c++)
+                for (int c = 0; c < columns; c++)
                 {
                     copy[r, c] = solution[r, c];
                 }
@@ -64,15 +66,15 @@ namespace Sudoku
         }
 
         /// <summary>
-        /// Returns true if the gameboard is valid.
-        /// Recursive method that assigns random numbers from the list of
-        /// optional numbers. If assignment is not valid, disregard number
+        /// Returns true if the game is valid under Sudoku rules.
+        /// Recursive method assigns random integers from the list of
+        /// optional values. If assignment is not valid, remove number from options list
         /// and choose another value from the options list. If list is empty,
         /// backtrack to the previous cell, choose a new value and repeat.
         /// </summary>
-        /// <param name="r">row</param>
-        /// <param name="c">column</param>
-        /// <param name="ops">options list containing valid numbers for cell[r,c]</param>
+        /// <param name="r">cell row</param>
+        /// <param name="c">cell column</param>
+        /// <param name="cellOptions">options list containing valid numbers for cell[r,c]</param>
         /// <returns>true if the gameboard is valid</returns>
         private Boolean FillCell(int r, int c, ArrayList cellOptions)
         {
@@ -81,7 +83,7 @@ namespace Sudoku
 
             Random rand = new Random();
             int opsIndex = rand.Next(cellOptions.Count);
-            int num = (int) cellOptions[opsIndex];
+            int num = (int)cellOptions[opsIndex];
             solution[r, c] = num;
 
             if (r == 8 && c == 8)
@@ -89,15 +91,15 @@ namespace Sudoku
             else
             {
                 int nextR = this.GetNextCell(r,c)[0];
-                int nextC = this.GetNextCell(r, c)[1];
-                bool success = FillCell(nextR, nextC, this.GetOptions(nextR, nextC));
+                int nextC = this.GetNextCell(r,c)[1];
+                bool success = this.FillCell(nextR, nextC, this.GetOptions(nextR, nextC));
 
                 if (success)
                     return true;
-
+        
                 cellOptions.RemoveAt(opsIndex);
                 solution[r, c] = 0;
-                return FillCell(r, c, cellOptions);
+                return this.FillCell(r, c, cellOptions);
             }
         }
 
@@ -128,18 +130,18 @@ namespace Sudoku
         /// <returns>list of valid numbers for cell[row,col]</returns>
         private ArrayList GetOptions(int r, int c)
         {
-            ArrayList lists = new ArrayList();
-            lists.AddRange(this.GetRow(r));
-            lists.AddRange(this.GetCol(c));
-            lists.AddRange(this.GetBlock(r, c));
+            ArrayList unavailableValues = new ArrayList();
+            unavailableValues.AddRange(this.GetRow(r));
+            unavailableValues.AddRange(this.GetCol(c));
+            unavailableValues.AddRange(this.GetBlock(r, c));
 
-            ArrayList options = new ArrayList();
+            ArrayList uniqueOptions = new ArrayList();
             for (int d = 1; d < 10; d++)
             {
-                if (!lists.Contains(d))
-                    options.Add(d);
+                if (!unavailableValues.Contains(d))
+                    uniqueOptions.Add(d);
             }
-            return options;
+            return uniqueOptions;
         }
 
         /// <summary>
@@ -149,13 +151,13 @@ namespace Sudoku
         /// <returns>list of numbers currently in row r</returns>
         private ArrayList GetRow(int r)
         {
-            ArrayList row = new ArrayList();
-            for (int i = 0; i < 9; i++)
+            ArrayList rowValues = new ArrayList();
+            for (int i = 0; i < columns; i++)
             {
                 if (solution[r, i] != 0)
-                    row.Add(solution[r, i]);
+                    rowValues.Add(solution[r, i]);
             }
-            return row;
+            return rowValues;
         }
 
         /// <summary>
@@ -165,13 +167,13 @@ namespace Sudoku
         /// <returns>list of numbers currently in column c</returns>
         private ArrayList GetCol(int c)
         {
-            ArrayList col = new ArrayList();
+            ArrayList columnValues = new ArrayList();
             for (int i = 0; i < 9; i++)
             {
                 if (solution[i, c] != 0)
-                    col.Add(solution[i, c]);
+                    columnValues.Add(solution[i, c]);
             }
-            return col;
+            return columnValues;
         }
 
         /// <summary>
@@ -186,15 +188,15 @@ namespace Sudoku
             int blockR = (r / 3) * 3;
             int blockC = (c / 3) * 3;
 
-            ArrayList block = new ArrayList();
+            ArrayList blockValues = new ArrayList();
             for (int i = blockR; i < blockR + 3; i++)
             {
                 for (int j = blockC; j < blockC + 3; j++)
                 {
-                    block.Add(solution[i, j]);
+                    blockValues.Add(solution[i, j]);
                 }
             }
-            return block;
+            return blockValues;
         }
     }
 }
