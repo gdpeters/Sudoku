@@ -21,30 +21,34 @@ namespace Sudoku
 {
     class Game
     {
+        public enum Difficulty { EASY, MEDIUM, HARD}
+        private const int levelEasy = 30;
+        private const int levelMedium = 40;
+        private const int levelHard = 50;
+        private const int rows = 9;
+        private const int columns = 9;
+        private int levelGame;
         private Solution solution; //complete gameboard
         private int[,] startBoard; //gameboard with omitted cells
 
+
         public Game()
         {
-            solution = new Solution();
+            solution = new Solution(rows, columns);
             startBoard = null;
         }
 
-        /// <summary>
-        /// Returns a gameboard with omitted cells.
-        /// </summary>
-        /// <param name="fullBoard">solution for this game</param>
-        /// <param name="level">number of cells to omit</param>
-        /// <returns>gameboard with omitted cells</returns>
-        public void StartGame(int level)
+        public void StartGame(Difficulty d)
         {
+            levelGame = this.GetLevel(d);
+
             startBoard = solution.CopySolution();
             ArrayList hideIndex = new ArrayList();
             Random rand = new Random();
             int i = 0;
-            while (i < level)
+            while (i < levelGame)
             {
-                int cellIndex = rand.Next(81);//0-80
+                int cellIndex = rand.Next(rows*columns);//0-80
                 if (!hideIndex.Contains(cellIndex))
                 {
                     hideIndex.Add(cellIndex);
@@ -54,10 +58,20 @@ namespace Sudoku
 
             foreach (int cell in hideIndex)
             {
-                int row = cell / 9;
-                int col = cell % 9;
+                int row = cell / rows;
+                int col = cell % columns;
                 startBoard[row, col] = 0;
             }
+        }
+
+        private int GetLevel(Difficulty d)
+        {
+            if (d == Difficulty.HARD)
+                return levelHard;
+            else if (d == Difficulty.MEDIUM)
+                return levelMedium;
+            else
+                return levelEasy;
         }
 
         public int[,] GetStartBoard()
@@ -65,8 +79,18 @@ namespace Sudoku
             return startBoard;
         }
 
-        public Boolean IsWinner(int[,] currentBoard)
+        public bool? CheckProgress(int[,] currentBoard)
         {
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < columns; c++)
+                {
+                    if (currentBoard[r,c] == 0)
+                    {
+                        return null;
+                    }
+                }
+            }
             return solution.IsEqual(currentBoard);
         }
     }
