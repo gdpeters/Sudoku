@@ -9,8 +9,7 @@ namespace Sudoku
 {
     class Solution
     {
-        private int rows;
-        private int columns;
+        private int rows, columns;
         private int[,] solution;
 
         public Solution(int rows, int columns)
@@ -65,17 +64,6 @@ namespace Sudoku
             return copy;
         }
 
-        /// <summary>
-        /// Returns true if the game is valid under Sudoku rules.
-        /// Recursive method assigns random integers from the list of
-        /// optional values. If assignment is not valid, remove number from options list
-        /// and choose another value from the options list. If list is empty,
-        /// backtrack to the previous cell, choose a new value and repeat.
-        /// </summary>
-        /// <param name="r">cell row</param>
-        /// <param name="c">cell column</param>
-        /// <param name="cellOptions">options list containing valid numbers for cell[r,c]</param>
-        /// <returns>true if the gameboard is valid</returns>
         private Boolean FillCell(int r, int c, ArrayList cellOptions)
         {
             if (cellOptions.Count < 1)
@@ -103,13 +91,6 @@ namespace Sudoku
             }
         }
 
-        /// <summary>
-        /// Returns the row number of the next cell
-        /// following the current cell.
-        /// </summary>
-        /// <param name="r">row of current cell</param>
-        /// <param name="c">column of current cell</param>
-        /// <returns>row number of next cell</returns>
         private int[] GetNextCell(int r, int c)
         {
             int[] nextCell = null;
@@ -122,12 +103,6 @@ namespace Sudoku
             return nextCell;
         }
 
-        /// <summary>
-        /// Returns a list of valid numbers for cell[row,col]
-        /// </summary>
-        /// <param name="r">row</param>
-        /// <param name="c">column</param>
-        /// <returns>list of valid numbers for cell[row,col]</returns>
         private ArrayList GetOptions(int r, int c)
         {
             ArrayList unavailableValues = new ArrayList();
@@ -144,11 +119,6 @@ namespace Sudoku
             return uniqueOptions;
         }
 
-        /// <summary>
-        /// Returns a list of numbers currently in row r.
-        /// </summary>
-        /// <param name="r">row</param>
-        /// <returns>list of numbers currently in row r</returns>
         private ArrayList GetRow(int r)
         {
             ArrayList rowValues = new ArrayList();
@@ -160,11 +130,6 @@ namespace Sudoku
             return rowValues;
         }
 
-        /// <summary>
-        /// Returns a list of numbers currently in column c
-        /// </summary>
-        /// <param name="c">column</param>
-        /// <returns>list of numbers currently in column c</returns>
         private ArrayList GetCol(int c)
         {
             ArrayList columnValues = new ArrayList();
@@ -176,13 +141,6 @@ namespace Sudoku
             return columnValues;
         }
 
-        /// <summary>
-        /// Returns a list of numbers currently in the 3x3
-        /// block where cell[r,c] resides
-        /// </summary>
-        /// <param name="r">row</param>
-        /// <param name="c">column</param>
-        /// <returns>list of numbers currently in block</returns>
         private ArrayList GetBlock(int r, int c)
         {
             int blockR = (r / 3) * 3;
