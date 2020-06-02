@@ -19,19 +19,17 @@ namespace Sudoku
 {
     public partial class MainWindow : Window
     {
-        private const int EASY = 30;
-        private const int MED = 40;
-        private const int HARD = 50;
+       
         private Game game;
         private int[,] currentBoard;
         private DispatcherTimer t, fader;
-        private GameTimer gameTimer;
+        private GameClock gameClock;
 
         public MainWindow()
         {
             InitializeComponent();
             menuPopup.IsOpen = true;
-            gameTimer = new GameTimer();
+            gameClock = new GameClock();
             this.SetTimer();
         }
 
@@ -44,41 +42,56 @@ namespace Sudoku
             levelPopup.IsOpen = true;
         }
 
-        private void EasyClick(object sender, RoutedEventArgs e)
+        private void RestartGameClick(object sender, RoutedEventArgs e)
         {
-            this.ChooseLevel(EASY);
-        }
-        private void MediumClick(object sender, RoutedEventArgs e)
-        {
-            this.ChooseLevel(MED);
-        }
-        private void HardClick(object sender, RoutedEventArgs e)
-        {
-            this.ChooseLevel(HARD);
-        }
-        private void ChooseLevel(int level)
-        {
-            game.StartGame(level);
-            this.WriteCells();
-            levelPopup.IsOpen = false;
-            gameTimer.Start();
+            t.Stop();
+            this.DisplayGame();
+            menuPopup.IsOpen = false;
+            gameClock = new GameClock();
+            gameClock.Start();
             t.Start();
         }
 
-        private void SetTimer()
+        private void CloseMenuClick(object sender, RoutedEventArgs e)
         {
-            t = new DispatcherTimer();
-            t.Interval = TimeSpan.FromSeconds(1);
-            t.Tick += UpdateClock;
+            menuPopup.IsOpen = false;
+            gameClock.Resume();
+            t.Start();
         }
 
-        private void UpdateClock(object sender, EventArgs e)
+        private void QuitGameClick(object sender, RoutedEventArgs e)
         {
-            Clock.Text = gameTimer.GetTime();
+            t.Stop();
+            menuPopup.IsOpen = false;
+            this.Close();
         }
 
+        private void OpenMenuClick(object sender, RoutedEventArgs e)
+        {
+            t.Stop();
+            gameClock.Pause();
+            menuPopup.IsOpen = true;
+        }
 
-        private void WriteCells()
+        private void LevelClick(object sender, RoutedEventArgs e)
+        {
+            Button b = (Button)sender;
+            string level = b.Content.ToString();
+
+            if (level.Equals("HARD"))
+                game.StartGame(Game.Difficulty.HARD);
+            else if (level.Equals("MEDIUM"))
+                game.StartGame(Game.Difficulty.MEDIUM);
+            else
+                game.StartGame(Game.Difficulty.EASY);
+
+            levelPopup.IsOpen = false;
+            this.DisplayGame();
+            gameClock.Start();
+            t.Start();
+        }
+
+        private void DisplayGame()
         {
             int[,] board = game.GetStartBoard();
             currentBoard = new int[9, 9];
@@ -103,89 +116,45 @@ namespace Sudoku
                         txtbx.Foreground = new SolidColorBrush(Colors.Black);
                     }
                     currentBoard[r, c] = board[r, c];
-                    txtbx.TextChanged += new TextChangedEventHandler(Text_Changed);
+                    txtbx.TextChanged += new TextChangedEventHandler(TextChanged);
                 }
             }
         }
 
-        private void OpenMenu(object sender, RoutedEventArgs e)
+        private void TextChanged(object sender, TextChangedEventArgs e)
         {
-            t.Stop();
-            gameTimer.Pause();
-            menuPopup.IsOpen = true;
-        }
-
-        private void RestartClick(object sender, RoutedEventArgs e)
-        {
-            t.Stop();
-            this.WriteCells();
-            menuPopup.IsOpen = false;
-            gameTimer = new GameTimer();
-            gameTimer.Start();
-            t.Start();
-        }
-
-        private void QuitClick(object sender, RoutedEventArgs e)
-        {
-            t.Stop();
-            menuPopup.IsOpen = false;
-            this.Close();
-        }
-
-        private void CloseClick(object sender, RoutedEventArgs e)
-        {
-            menuPopup.IsOpen = false;
-            gameTimer.Resume();
-            t.Start();
-        }
-
-        private void Text_Changed(object sender, TextChangedEventArgs e)
-        {
-            TextBox txtbx = (TextBox)sender;
-            string txtbxName = txtbx.Name;
-            int r = Int32.Parse(txtbxName.ToCharArray()[4].ToString());
-            int c = Int32.Parse(txtbxName.ToCharArray()[5].ToString());
+            TextBox cell = (TextBox)sender;
+            int r = Grid.GetRow(cell);
+            int c = Grid.GetColumn(cell);
             try
             {
-                currentBoard[r, c] = Int32.Parse(txtbx.Text);
-                this.CheckSolution();
+                currentBoard[r, c] = Int32.Parse(cell.Text);
+                this.DisplayBanner(game.CheckProgress(currentBoard));
             }
             catch (System.FormatException ex) { }
         }
 
-        private void CheckSolution()
+        private void DisplayBanner(bool? hasWon)
         {
-            bool isReady = true;
-            for (int r = 0; r < 9; r++)
+            if (hasWon != null)
             {
-                for (int c = 0; c < 9; c++)
-                {
-                    if (currentBoard[r,c] == 0)
-                    {
-                        isReady = false;
-                    }
-                }
-            }
-            
-            if (isReady)
-            {
-                t.Stop();
                 fader = new DispatcherTimer();
                 fader.Interval = TimeSpan.FromMilliseconds(75);
 
-                if (game.IsWinner(currentBoard))
+                if (hasWon == true)
                 {
-                    solved.Visibility = Visibility.Visible;                    
+                    t.Stop();
+                    solved.Visibility = Visibility.Visible;
                 }
-                else
+
+                if (hasWon == false)
                 {
                     notSolved.Visibility = Visibility.Visible;
-                    t.Start();
                 }
+
                 fader.Tick += RemoveBanner;
                 fader.Start();
-
-            }
+            } 
         }
 
         private void RemoveBanner(object sender, EventArgs e)
@@ -209,6 +178,18 @@ namespace Sudoku
                 banner.FontSize = banner.FontSize - 0.5;
                 banner.Opacity = banner.Opacity * 0.95;
             }
+        }
+
+        private void SetTimer()
+        {
+            t = new DispatcherTimer();
+            t.Interval = TimeSpan.FromSeconds(1);
+            t.Tick += UpdateClock;
+        }
+
+        private void UpdateClock(object sender, EventArgs e)
+        {
+            Clock.Text = gameClock.GetTime();
         }
     }
 }
