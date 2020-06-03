@@ -1,5 +1,8 @@
-# README #
-(in progress)
+## Sudoku ##
+
+*(in progress)*
+
+Classic desktop Sudoku game.
 
 #### Requirements: https://github.com/gdpeters/Sudoku/blob/master/Requirements.txt
 
